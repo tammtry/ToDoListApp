@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import  AddList  from "../ToDo/ToDo";
+import ToDo from "../ToDo/ToDo";
 
 const ToDoList = ({toDoList, onDelete, onUpdate, onEdit}) => {
 
@@ -7,7 +7,7 @@ const ToDoList = ({toDoList, onDelete, onUpdate, onEdit}) => {
     <div>
       {toDoList.map(todo => {
         return (
-          <AddList todo={todo} onDelete={onDelete} onUpdate={onUpdate} onEdit={onEdit}/>
+          <ToDo key={todo.id} todo={todo} onDelete={onDelete} onUpdate={onUpdate} onEdit={onEdit}/>
         )       
       })}
     </div>

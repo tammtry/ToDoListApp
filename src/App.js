@@ -1,15 +1,17 @@
 import './App.css';
-import ToDoList  from './components/ToDoList/ToDoList';
-import ToDoForm  from './components/ToDoForm/ToDoForm';
-import {AddList} from './components/ToDo/ToDo';
-import { useState } from 'react';
+import ToDoList from './components/ToDoList/ToDoList';
+import ToDoForm from './components/ToDoForm/ToDoForm';
+import React, { useEffect, useState } from 'react';
 
 function App() {
+  
   const [toDoList, setToDoList] = useState([])
+  const [filter, setFilter] = useState('all');
+  const [searchInput, setSearchInput] = useState('')
 
   const addTask = (userInput) => {
     let copy = [...toDoList];
-    copy = [...copy, { id: Math.random()*1000, task: userInput, complete: false }];
+    copy = [...copy, { id: Math.random() * 1000, task: userInput, complete: false }];
     setToDoList(copy);
     console.log(copy);
   }
@@ -26,19 +28,52 @@ function App() {
     setToDoList(updatedList);
   };
 
-  const filterTasks = (showCompleted) => {
-    const filteredList = showCompleted
-      ? toDoList.filter((task) => task.complete)
-      : toDoList.filter((task) => !task.complete);
-    setToDoList(filteredList);
+  const filterToDoList = () => {
+    switch (filter) {
+      case 'completed':
+        return toDoList.filter((task) => task.complete);
+      case 'uncompleted':
+        return toDoList.filter((task) => !task.complete);
+      default:
+        return toDoList;
+    }
   };
 
+  const handleFilterChange = (filterType) => {
+    setFilter(filterType);
+  };
+
+  const handleSearchInputChange = (e) => {
+    setSearchInput(e.currentTarget.value);
+  };
+
+  const handleSearch = () => {
+    const searchResults = toDoList.filter((task) =>
+      task.task.toLowerCase().includes(searchInput.toLowerCase())
+    );
+    setToDoList(searchResults);
+  };
 
   return (
     <div className="App">
-          <h3>TO DO LIST</h3>
-           <ToDoList toDoList={toDoList} onDelete={deleteTask} onUpdate={updateTask}/>
-           <ToDoForm addTask={addTask} filterTasks={filterTasks}/>        
+      <h3>TO DO LIST</h3>
+      <div>
+        <button onClick={() => handleFilterChange('all')}>All</button>
+        <button onClick={() => handleFilterChange('completed')}>Completed</button>
+        <button onClick={() => handleFilterChange('uncompleted')}>Uncompleted</button>
+      </div>
+      <div>
+        <input
+          type="text"
+          value={searchInput}
+          onChange={handleSearchInputChange}
+          placeholder="Search..."
+        />
+        <button onClick={handleSearch}>Search</button>
+      </div>
+      <ToDoList toDoList={filterToDoList()} onDelete={deleteTask} onUpdate={updateTask} />
+      <ToDoForm addTask={addTask}
+      />
     </div>
   );
 }

@@ -1,7 +1,6 @@
-
 import Ract, { useState } from 'react';
 
-const ToDoForm = ({addTask, filterTasks}) => {
+const ToDoForm = ({addTask}) => {
 
     const [ userInput, setUserInput ] = useState('');
 
@@ -15,18 +14,17 @@ const ToDoForm = ({addTask, filterTasks}) => {
         setUserInput("");
     }
 
-    const handleFilter = () => {
-        filterTasks(false);
-    }
-
     return(
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <form onSubmit={handleSubmit}>
             <input value={userInput} type="text" onChange={handleChange}/>
             <button>Add task</button>
         </form>
-        <button onClick={handleFilter}>Filter</button>     
-        </div>     
+            <div>
+
+            </div>    
+        </div>
+             
     );
 };
 
